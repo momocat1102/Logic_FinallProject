@@ -29,6 +29,7 @@ input CLK, LButton, RButton, LaserBeamButton, ResetButton,NormalButton,EasyButto
    reg			clk_6MHz;
    reg			clk_8Hz;
 	reg			difficult;
+	reg			flag;
 	assign		audio = audiof; // 控制開關
  
 
@@ -51,6 +52,7 @@ input CLK, LButton, RButton, LaserBeamButton, ResetButton,NormalButton,EasyButto
 			score_one = 4'b0000;
 			score_ten = 4'b0000;
 			life = 4'b1111;
+			flag = 1;
 		end
 	integer ballCD_down;
 	integer laserCD;
@@ -493,6 +495,7 @@ input CLK, LButton, RButton, LaserBeamButton, ResetButton,NormalButton,EasyButto
 					alphaCount = 0;
 					alphaCD = 0;
 					alpha = CLEAR;
+					flag = 1;
 				end
 			else
 				enable = 1;
@@ -506,8 +509,9 @@ input CLK, LButton, RButton, LaserBeamButton, ResetButton,NormalButton,EasyButto
 			COMM = x_count;
 			
 			//通關畫面
-			if(score > 19)
+			if(score > 'd10)
 				begin
+					flag = 0;
 					DATA_B = 8'b11111111;
 					DATA_R = 8'b11111111; 
 					DATA_G = 8'b11111111;
@@ -538,7 +542,7 @@ input CLK, LButton, RButton, LaserBeamButton, ResetButton,NormalButton,EasyButto
 					screenCOM = 2'b11;
 				end
 			//失敗畫面
-			else if(life == 4'b0000)
+			else if(life == 4'b0000 && flag)
 				begin
 					DATA_B = 8'b11111111;
 					DATA_R = 8'b11111111; 
